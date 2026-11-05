@@ -1,10 +1,9 @@
-
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        res = defaultdict(list)
+        table = defaultdict(list)
         for s in strs:
-            table = [0] * 26
+            table_s = [0] * 26
             for char in s:
-                table[ord(char) - ord('a')] += 1
-            res[tuple(table)].append(s)
-        return list(res.values())
+                table_s[ord(char) - ord('a')] += 1
+            table[tuple(table_s)].append(s)
+        return list(table.values())
