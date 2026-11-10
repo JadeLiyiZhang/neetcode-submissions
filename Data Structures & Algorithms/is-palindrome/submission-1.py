@@ -2,9 +2,9 @@ class Solution:
     def isPalindrome(self, s: str) -> bool:
         left, right = 0, len(s) - 1
         while left < right:
-            while left < right and not s[left].isalnum():
+            while not s[left].isalnum() and left < right:
                 left += 1
-            while left < right and not s[right].isalnum():
+            while not s[right].isalnum() and left < right:
                 right -= 1
             if s[left].lower() != s[right].lower():
                 return False
