@@ -1,33 +1,35 @@
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-        need = {}
-        for char in t:
-            need[char] = need.get(char, 0) + 1
+        n = len(t)
         left = 0
-        window = {}
         valid = 0
-        min_len = float('inf')
-        answer_start = 0
+
+        table_t = defaultdict(int)
+        for char in t:
+            table_t[char] += 1
+
+        count = float('inf')
+        res = ''
 
         for right in range(len(s)):
-            if s[right] in t:
-                window[s[right]] = window.get(s[right], 0) + 1
-                if window[s[right]] == need[s[right]]:
+            char = s[right]
+            if char in table_t:
+                table_t[char] -= 1
+                if table_t[char] == 0:
                     valid += 1
 
-            while valid == len(need):
-                window_len = right - left + 1
-                if window_len < min_len:
-                    min_len = window_len
-                    answer_start = left
-                
-                left_char = s[left]
-                if left_char in need:
-                    if window[left_char] == need[left_char]:
+            while valid == len(table_t):
+                cur_count = right - left + 1
+                if cur_count < count:
+                    count = cur_count
+                    res = s[left: right + 1]
+                outgoing = s[left]
+                if outgoing in table_t:
+                    if table_t[outgoing] == 0:
                         valid -= 1
-                    window[left_char] -= 1
+                    table_t[outgoing] += 1
                 left += 1
-
-        if min_len == float('inf'):
+        if count == float('inf'):
             return ''
-        return s[answer_start: answer_start + min_len]
+                
+        return res
