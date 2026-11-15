@@ -9,8 +9,8 @@ class Solution:
         prev = None
         cur = head
         while cur:
-            next_node = cur.next
+            temp = cur.next
             cur.next = prev
             prev = cur
-            cur = next_node
+            cur = temp
         return prev
