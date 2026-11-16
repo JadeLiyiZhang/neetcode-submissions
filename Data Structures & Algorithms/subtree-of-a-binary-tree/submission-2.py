@@ -7,22 +7,22 @@
 
 class Solution:   
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
-        
-        def isSame(p, q):
-            if not p and not q:
-                return True
-            
-            if p and q and p.val == q.val:
-                return isSame(p.left, q.left) and isSame(q.right, p.right)
-            else:
-                return False
-        if not root:
-            return False
         if not subRoot:
             return True
-        if root and subRoot and root.val == subRoot.val:
-            if isSame(root, subRoot):
-                return True
-        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
-        return False
+        if not root:
+            return False
+        if self.helper(root, subRoot):
+            return True
+        return (self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot))
 
+    
+    
+    def helper(self, root, subRoot):
+        if root is None and subRoot is None:
+            return True
+        if root and subRoot and root.val == subRoot.val:
+            return (self.helper(root.left, subRoot.left) and
+                   self.helper(root.right, subRoot.right))
+        return False
+        
+        
