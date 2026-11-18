@@ -7,24 +7,17 @@
 
 class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
-        res = -float('inf')
-        def dfs(root):
-            nonlocal res
-            if not root:
-                return
-            left = self.getMax(root.left)
-            right = self.getMax(root.right)
-            res = max(res, root.val + left + right)
-            dfs(root.left)
-            dfs(root.right)
-        dfs(root)
-        return res
-
-    def getMax(self, root):
         if not root:
             return 0
+        res = float('-inf')
+        def helper(node):
+            nonlocal res
+            if not node:
+                return 0
+            left = helper(node.left)
+            right = helper(node.right)
+            res = max(res, node.val + left + right)
+            return max(0, node.val + left, node.val + right)
         
-        left = self.getMax(root.left)
-        right = self.getMax(root.right)
-        path = root.val + max(left,right)
-        return max(0, path)
+        helper(root)
+        return res
