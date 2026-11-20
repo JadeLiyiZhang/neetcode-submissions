@@ -1,42 +1,40 @@
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
-        chessboard = [['.'] * n for _ in range(n)]
+        board = [['.'] * n for _ in range(n)]
         res = []
-               
-        def isSafe(r, c, board):
-            row = r - 1
-            while row >= 0:
-                if board[row][c] == 'Q':
-                    return False
-                row -= 1
-            
-            row, col = r - 1, c - 1
-            while row >= 0 and col >= 0:
-                if board[row][col] == 'Q':
-                    return False
-                row -= 1
-                col -=1
-            
-            row, col = r - 1, c + 1
-            while row >= 0 and col < len(board):
-                if board[row][col] == 'Q':
-                    return False
-                row -= 1
-                col += 1
-            
-            return True
-
-        def backtracking(i):
-            if i == n:
-                res.append([''.join(row) for row in chessboard])
+        def dfs(r):
+            if r == n:
+                ans = ["".join(row) for row in board]
+                res.append(ans)
                 return
             
-            for j in range(n):
-                # try to place Q in chessboard[i][j]
-                if isSafe(i, j, chessboard):
-                    chessboard[i][j] = 'Q'
-                    backtracking(i + 1)
-                    chessboard[i][j] = '.'
+            for c in range(n):
+                if self.safe(r, c, board):
+                    board[r][c] = 'Q'
+                    dfs(r + 1)
+                    board[r][c] = '.'
         
-        backtracking(0)
+        dfs(0)
         return res
+
+
+    def safe(self, i, j, board):
+        n = len(board)
+        for k in range(n):
+            if board[i][k] == "Q":
+                return False
+            if board[k][j] == "Q":
+                return False
+        
+        directions = [[-1, -1], [1, 1], [-1, 1], [1, -1]]
+        for x, y in directions:
+            new_i, new_j = i + x, j + y
+            while 0 <= new_i < n and 0 <= new_j < n:
+                if board[new_i][new_j] == "Q":
+                    return False
+                new_i += x
+                new_j += y
+        return True
+
+
+
